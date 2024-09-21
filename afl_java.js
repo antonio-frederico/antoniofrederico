@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function imageLoaded() {
         loadedImages++;
         const percentLoaded = Math.round((loadedImages / totalImages) * 100);
-        loaderText.textContent = `${percentLoaded}%`;
+        loaderText.textContent = `loading: ${percentLoaded}%`;
 
         // Show content when 85% of images are loaded
         if (percentLoaded >= 85) {
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // Fallback: If loading takes too long, show content anyway
-        setTimeout(showContent, 10000); // 10 seconds timeout
+        setTimeout(showContent, 13500); // 10 seconds timeout
     }
  
   // Function to shuffle array elements
