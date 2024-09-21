@@ -1,4 +1,38 @@
 document.addEventListener("DOMContentLoaded", function () {
+ 
+   // New loading functionality
+   let loadedImages = 0;
+   const totalImages = document.images.length;
+   const loaderText = document.getElementById('loader-text');
+   const loader = document.getElementById('loader');
+   const content = document.getElementById('content');
+
+   function imageLoaded() {
+       loadedImages++;
+       const percentLoaded = Math.round((loadedImages / totalImages) * 100);
+       loaderText.textContent = `Loading: ${percentLoaded}%`;
+
+       if (loadedImages === totalImages) {
+           loader.style.display = 'none';
+           content.style.display = 'block';
+           // Initialize the rest of the page functionality
+           initializePage();
+       }
+   }
+
+   if (totalImages === 0) {
+       loader.style.display = 'none';
+       content.style.display = 'block';
+       initializePage();
+   } else {
+       for (let i = 0; i < totalImages; i++) {
+           const img = new Image();
+           img.onload = imageLoaded;
+           img.onerror = imageLoaded; // Count errors as loaded to avoid stalling
+           img.src = document.images[i].src;
+       }
+   }
+ 
   // Function to shuffle array elements
   function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
