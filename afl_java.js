@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // Fallback: If loading takes too long, show content anyway
-        setTimeout(showContent, 13500); // 10 seconds timeout
+        setTimeout(showContent, 15000); // 10 seconds timeout
     }
  
   // Function to shuffle array elements
