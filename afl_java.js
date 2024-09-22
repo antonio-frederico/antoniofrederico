@@ -12,8 +12,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const percentLoaded = Math.round((loadedImages / totalImages) * 100);
         loaderText.textContent = `loading: ${percentLoaded}%`;
 
-        // Show content when 85% of images are loaded
-        if (percentLoaded >= 85) {
+        // Show content when 100% of images are loaded
+        if (percentLoaded >= 100) {
             showContent();
         }
     }
