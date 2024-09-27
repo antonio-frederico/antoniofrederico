@@ -3,13 +3,15 @@ document.addEventListener("DOMContentLoaded", function () {
 // List of expressions
 const expressions = [
   "harmonizing contents",
-  "generating texts",
-  "gathering time",
   "manifesting forms",
-  "joining fragments",
-  "superimposing images",
+  "generating texts",
   "optimizing rhymes",
-  "materializing context"
+  "materializing context",
+  "polishing joints",
+  "superimposing images",
+  "adding light",
+  "gathering time",
+  "coupling fragments", 
 ];
 
 let currentExpressionIndex = 0;
@@ -60,7 +62,7 @@ if (totalImages === 0) {
     img.src = document.images[i].src;
   }
   // Fallback: If loading takes too long, show content anyway
-  setTimeout(showContent, 16000); // 16 seconds timeout
+  setTimeout(showContent, 20000); // 16 seconds timeout
 }
  
   // Function to shuffle array elements
