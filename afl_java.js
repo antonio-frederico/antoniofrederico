@@ -1,43 +1,67 @@
 document.addEventListener("DOMContentLoaded", function () {
  
-    // Updated loading functionality
-    let loadedImages = 0;
-    const totalImages = document.images.length;
-    const loaderText = document.getElementById('loader-text');
-    const loader = document.getElementById('loader');
-    const content = document.getElementById('content');
+// List of expressions
+const expressions = [
+  "harmonizing contents",
+  "generating texts",
+  "gathering time",
+  "manifesting forms",
+  "joining fragments",
+  "superimposing images",
+  "optimizing rhymes",
+  "materializing context"
+];
 
-    function imageLoaded() {
-        loadedImages++;
-        const percentLoaded = Math.round((loadedImages / totalImages) * 100);
-        loaderText.textContent = `loading: ${percentLoaded}%`;
+let currentExpressionIndex = 0;
+let loadedImages = 0;
+const totalImages = document.images.length;
+const loaderText = document.getElementById('loader-text');
+const loader = document.getElementById('loader');
+const content = document.getElementById('content');
 
-        // Show content when 100% of images are loaded
-        if (percentLoaded >= 100) {
-            showContent();
-        }
-    }
+function changeExpression() {
+  currentExpressionIndex = (currentExpressionIndex + 1) % expressions.length;
+  updateLoaderText();
+}
 
-    function showContent() {
-        loader.style.display = 'none';
-        content.style.display = 'block';
-        // Initialize the rest of the page functionality
-        initializePage();
-    }
+function updateLoaderText() {
+  const percentLoaded = Math.round((loadedImages / totalImages) * 100);
+  loaderText.textContent = `${expressions[currentExpressionIndex]}: ${percentLoaded}%`;
+}
 
-    if (totalImages === 0) {
-        showContent();
-    } else {
-        for (let i = 0; i < totalImages; i++) {
-            const img = new Image();
-            img.onload = imageLoaded;
-            img.onerror = imageLoaded; // Count errors as loaded to avoid stalling
-            img.src = document.images[i].src;
-        }
+function imageLoaded() {
+  loadedImages++;
+  updateLoaderText();
+  
+  // Show content when 100% of images are loaded
+  if (loadedImages >= totalImages) {
+    showContent();
+  }
+}
 
-        // Fallback: If loading takes too long, show content anyway
-        setTimeout(showContent, 15000); // 10 seconds timeout
-    }
+function showContent() {
+  clearInterval(expressionInterval);
+  loader.style.display = 'none';
+  content.style.display = 'block';
+  // Initialize the rest of the page functionality
+  initializePage();
+}
+
+// Start changing expressions every 2 seconds
+const expressionInterval = setInterval(changeExpression, 2000);
+
+if (totalImages === 0) {
+  showContent();
+} else {
+  for (let i = 0; i < totalImages; i++) {
+    const img = new Image();
+    img.onload = imageLoaded;
+    img.onerror = imageLoaded; // Count errors as loaded to avoid stalling
+    img.src = document.images[i].src;
+  }
+  // Fallback: If loading takes too long, show content anyway
+  setTimeout(showContent, 16000); // 16 seconds timeout
+}
  
   // Function to shuffle array elements
   function shuffle(array) {
