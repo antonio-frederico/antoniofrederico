@@ -6,13 +6,17 @@ document.addEventListener("DOMContentLoaded", function () {
       "manifesting forms",
       "generating texts",
       "optimizing rhymes",
-      "materializing context",
-      "transfiguring the everyday",
-      "coupling fragments",
+      "materializing ethereal substances",
+      "joining opposing fragments",
+      "improvising connections",
+      "dilating time/space",
+      "transfiguring materials",
+      "coupling rhizomes",
+      "suppementing context",
       "superimposing images",
       "adding light",
-      "gathering time",
-      "joining rhizomes",
+      "emulsifying primordial soup",
+     
   ];
   let currentExpressionIndex = 0;
   let loadedImages = 0;
@@ -48,8 +52,8 @@ document.addEventListener("DOMContentLoaded", function () {
       initializePage();
   }
 
-  // Start changing expressions every 2 seconds
-  const expressionInterval = setInterval(changeExpression, 2000);
+  // Start changing expressions every 1.5 seconds
+  const expressionInterval = setInterval(changeExpression, 1500);
 
   // Get all images (including both JPEG and GIF)
   const images = document.querySelectorAll('img[src$=".jpg"], img[src$=".jpeg"], img[src$=".gif"]');
