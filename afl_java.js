@@ -1,76 +1,43 @@
 document.addEventListener("DOMContentLoaded", function () {
  
-    // List of expressions
-    const expressions = [
-      "harmonizing contents",
-      "manifesting forms",
-      "generating texts",
-      "optimizing rhymes",
-      "materializing ethereal substances",
-      "joining opposing fragments",
-      "improvising connections",
-      "dilating time/space",
-      "transfiguring materials",
-      "coupling rhizomes",
-      "suppementing context",
-      "superimposing images",
-      "adding light",
-      "emulsifying primordial soup",
-     
-  ];
-  let currentExpressionIndex = 0;
-  let loadedImages = 0;
-  let totalImages = 0;
-  const loaderText = document.getElementById('loader-text');
-  const loader = document.getElementById('loader');
-  const content = document.getElementById('content');
+    // Updated loading functionality
+    let loadedImages = 0;
+    const totalImages = document.images.length;
+    const loaderText = document.getElementById('loader-text');
+    const loader = document.getElementById('loader');
+    const content = document.getElementById('content');
 
-  function changeExpression() {
-      currentExpressionIndex = (currentExpressionIndex + 1) % expressions.length;
-      updateLoaderText();
-  }
+    function imageLoaded() {
+        loadedImages++;
+        const percentLoaded = Math.round((loadedImages / totalImages) * 100);
+        loaderText.textContent = `loading: ${percentLoaded}%`;
 
-  function updateLoaderText() {
-      const percentLoaded = Math.round((loadedImages / totalImages) * 100);
-      loaderText.textContent = `${expressions[currentExpressionIndex]}: ${percentLoaded}%`;
-  }
+        // Show content when 85% of images are loaded
+        if (percentLoaded >= 85) {
+            showContent();
+        }
+    }
 
-  function imageLoaded() {
-      loadedImages++;
-      updateLoaderText();
-      // Show content when 100% of images are loaded
-      if (loadedImages >= totalImages) {
-          showContent();
-      }
-  }
+    function showContent() {
+        loader.style.display = 'none';
+        content.style.display = 'block';
+        // Initialize the rest of the page functionality
+        initializePage();
+    }
 
-  function showContent() {
-      clearInterval(expressionInterval);
-      loader.style.display = 'none';
-      content.style.display = 'block';
-      // Initialize the rest of the page functionality
-      initializePage();
-  }
+    if (totalImages === 0) {
+        showContent();
+    } else {
+        for (let i = 0; i < totalImages; i++) {
+            const img = new Image();
+            img.onload = imageLoaded;
+            img.onerror = imageLoaded; // Count errors as loaded to avoid stalling
+            img.src = document.images[i].src;
+        }
 
-  // Start changing expressions every 1.5 seconds
-  const expressionInterval = setInterval(changeExpression, 1500);
-
-  // Get all images (including both JPEG and GIF)
-  const images = document.querySelectorAll('img[src$=".jpg"], img[src$=".jpeg"], img[src$=".gif"]');
-  totalImages = images.length;
-
-  if (totalImages === 0) {
-      showContent();
-  } else {
-      images.forEach(img => {
-          const newImg = new Image();
-          newImg.onload = imageLoaded;
-          newImg.onerror = imageLoaded; // Count errors as loaded to avoid stalling
-          newImg.src = img.src;
-      });
-      // Fallback: If loading takes too long, show content anyway
-      setTimeout(showContent, 22000); // 22 seconds timeout
-  }
+        // Fallback: If loading takes too long, show content anyway
+        setTimeout(showContent, 15000); // 10 seconds timeout
+    }
  
   // Function to shuffle array elements
   function shuffle(array) {
