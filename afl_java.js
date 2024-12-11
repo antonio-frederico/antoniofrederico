@@ -35,6 +35,11 @@ document.addEventListener("DOMContentLoaded", function () {
       loaderText.textContent = `${expressions[currentExpressionIndex]}: ${percentLoaded}%`;
   }
 
+  window.addEventListener('load', function() {
+    document.getElementById('loader').style.display = 'none';
+    document.getElementById('content').style.display = 'block';
+  });
+
   function imageLoaded() {
       loadedImages++;
       updateLoaderText();
