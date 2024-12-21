@@ -1,368 +1,372 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-  // List of expressions
-  const expressions = [
-      "harmonizing contents",
-      "manifesting forms",
-      "generating texts",
-      "optimizing rhymes",
-      "materializing ethereal substances",
-      "joining opposing fragments",
-      "improvising connections",
-      "dilating time/space",
-      "transfiguring materials",
-      "coupling rhizomes",
-      "supplementing context",
-      "superimposing images",
-      "adding light",
-      "emulsifying primordial soup",
-  ];
-  let currentExpressionIndex = 0;
-  let loadedImages = 0;
-  let totalImages = 0;
-  const loaderText = document.getElementById('loader-text');
-  const loader = document.getElementById('loader');
-  const content = document.getElementById('content');
+    // List of expressions
+    const expressions = [
+        "harmonizing contents",
+        "manifesting forms",
+        "generating texts",
+        "optimizing rhymes",
+        "materializing ethereal substances",
+        "joining opposing fragments",
+        "improvising connections",
+        "dilating time/space",
+        "transfiguring materials",
+        "coupling rhizomes",
+        "supplementing context",
+        "superimposing images",
+        "adding light",
+        "emulsifying primordial soup",
+    ];
+    let currentExpressionIndex = 0;
+    let loadedImages = 0;
+    let totalImages = 0;
+    const loaderText = document.getElementById('loader-text');
+    const loader = document.getElementById('loader');
+    const content = document.getElementById('content');
 
-  function changeExpression() {
-      currentExpressionIndex = (currentExpressionIndex + 1) % expressions.length;
-      updateLoaderText();
-  }
+    function changeExpression() {
+        currentExpressionIndex = (currentExpressionIndex + 1) % expressions.length;
+        updateLoaderText();
+    }
 
-  function updateLoaderText() {
-      const percentLoaded = Math.round((loadedImages / totalImages) * 100);
-      loaderText.textContent = `${expressions[currentExpressionIndex]}: ${percentLoaded}%`;
-  }
+    function updateLoaderText() {
+        const percentLoaded = Math.round((loadedImages / totalImages) * 100);
+        loaderText.textContent = `${expressions[currentExpressionIndex]}: ${percentLoaded}%`;
+    }
 
-  window.addEventListener('load', function () {
-      document.getElementById('loader').style.display = 'none';
-      document.getElementById('content').style.display = 'block';
-  });
+    window.addEventListener('load', function () {
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('content').style.display = 'block';
+    });
 
-  function imageLoaded() {
-      loadedImages++;
-      updateLoaderText();
-      // Show content when 100% of images are loaded
-      if (loadedImages >= totalImages) {
-          showContent();
-      }
-  }
+    function imageLoaded() {
+        loadedImages++;
+        updateLoaderText();
+        // Show content when 100% of images are loaded
+        if (loadedImages >= totalImages) {
+            showContent();
+        }
+    }
 
-  function showContent() {
-      clearInterval(expressionInterval);
-      loader.style.display = 'none';
-      content.style.display = 'block';
-      // Initialize the rest of the page functionality
-      initializePage();
-  }
+    function showContent() {
+        clearInterval(expressionInterval);
+        loader.style.display = 'none';
+        content.style.display = 'block';
+        // Initialize the rest of the page functionality
+        initializePage();
+    }
 
-  // Start changing expressions every 1.5 seconds
-  const expressionInterval = setInterval(changeExpression, 1500);
+    // Start changing expressions every 1.5 seconds
+    const expressionInterval = setInterval(changeExpression, 1500);
 
-  // Get only visible images (not hidden in toggle content)
-  const images = Array.from(document.querySelectorAll('img[src$=".jpg"], img[src$=".jpeg"], img[src$=".gif"]'))
-      .filter(img => {
-          return img.offsetParent !== null; // Check if the image is visible
-      });
+    // Separate visible and hidden images
+    const visibleImages = Array.from(document.querySelectorAll('img[src$=".jpg"], img[src$=".jpeg"], img[src$=".gif"]'))
+        .filter(img => img.offsetParent !== null); // Check if the image is visible
 
-  totalImages = images.length;
+    const hiddenImages = Array.from(document.querySelectorAll('img[src$=".jpg"], img[src$=".jpeg"], img[src$=".gif"]'))
+        .filter(img => img.offsetParent === null); // Hidden images
 
-  if (totalImages === 0) {
-      showContent();
-  } else {
-      images.forEach(img => {
-          const newImg = new Image();
-          newImg.onload = imageLoaded;
-          newImg.onerror = imageLoaded; // Count errors as loaded to avoid stalling
-          newImg.src = img.src;
-      });
-      // Fallback: If loading takes too long, show content anyway
-      setTimeout(showContent, 22000); // 22 seconds timeout
-  }
+    // Combine visible images first, followed by hidden images
+    const allImages = [...visibleImages, ...hiddenImages];
 
-  // Function to shuffle array elements
-  function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-  }
+    totalImages = allImages.length;
 
-  const projectList = document.getElementById("projectList");
-  const projects = Array.from(document.querySelectorAll(".project"));
+    if (totalImages === 0) {
+        showContent();
+    } else {
+        allImages.forEach(img => {
+            const newImg = new Image();
+            newImg.onload = imageLoaded;
+            newImg.onerror = imageLoaded; // Count errors as loaded to avoid stalling
+            newImg.src = img.src;
+        });
+        // Fallback: If loading takes too long, show content anyway
+        setTimeout(showContent, 22000); // 22 seconds timeout
+    }
 
-  if (projectList) {
-      // Shuffle projects array
-      const shuffledProjects = shuffle(projects);
+    // Function to shuffle array elements
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
 
-      // Clear existing content of projectList
-      projectList.innerHTML = "";
+    const projectList = document.getElementById("projectList");
+    const projects = Array.from(document.querySelectorAll(".project"));
 
-      // Append shuffled projects to projectList and main content
-      shuffledProjects.forEach((project) => {
-          const projectId = project.getAttribute("id");
-          const projectTitle = project.querySelector("h2").textContent;
-          const listItem = document.createElement("li");
-          const link = document.createElement("a");
-          link.setAttribute("href", `#${projectId}`);
-          link.textContent = projectTitle;
-          listItem.appendChild(link);
-          projectList.appendChild(listItem);
+    if (projectList) {
+        // Shuffle projects array
+        const shuffledProjects = shuffle(projects);
 
-          // Append project to main content
-          document.querySelector(".main-content").appendChild(project);
-      });
-  }
+        // Clear existing content of projectList
+        projectList.innerHTML = "";
 
-  // Function to ensure the page loads at the top position
-  function resetScrollPosition() {
-      window.scrollTo(0, 0);
-  }
+        // Append shuffled projects to projectList and main content
+        shuffledProjects.forEach((project) => {
+            const projectId = project.getAttribute("id");
+            const projectTitle = project.querySelector("h2").textContent;
+            const listItem = document.createElement("li");
+            const link = document.createElement("a");
+            link.setAttribute("href", `#${projectId}`);
+            link.textContent = projectTitle;
+            listItem.appendChild(link);
+            projectList.appendChild(listItem);
 
-  // Call resetScrollPosition when the page is fully loaded
-  window.onload = resetScrollPosition;
+            // Append project to main content
+            document.querySelector(".main-content").appendChild(project);
+        });
+    }
 
-  // Call resetScrollPosition after a slight delay to ensure it applies
-  setTimeout(resetScrollPosition, 100);
+    // Function to ensure the page loads at the top position
+    function resetScrollPosition() {
+        window.scrollTo(0, 0);
+    }
 
-  // Intersection Observer for highlighting visible section
-  const observerOptions = {
-      root: null,
-      rootMargin: "0px",
-      threshold: 0.5, // Trigger when 50% of the section is visible
-  };
+    // Call resetScrollPosition when the page is fully loaded
+    window.onload = resetScrollPosition;
 
-  const observerCallback = (entries) => {
-      entries.forEach((entry) => {
-          const link = projectList.querySelector(`a[href="#${entry.target.id}"]`);
-          if (entry.isIntersecting) {
-              document.querySelectorAll('#projectList a').forEach(a => a.classList.remove('active'));
-              link.classList.add("active");
-          } else {
-              link.classList.remove("active");
-          }
-      });
-  };
+    // Call resetScrollPosition after a slight delay to ensure it applies
+    setTimeout(resetScrollPosition, 100);
 
-  const observer = new IntersectionObserver(observerCallback, observerOptions);
-  projects.forEach((project) => observer.observe(project));
+    // Intersection Observer for highlighting visible section
+    const observerOptions = {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.5, // Trigger when 50% of the section is visible
+    };
 
-  // Add toggle functionality for the CV section
-  const cvTitle = document.getElementById("cv-title");
-  const cvContent = document.getElementById("cv-content");
+    const observerCallback = (entries) => {
+        entries.forEach((entry) => {
+            const link = projectList.querySelector(`a[href="#${entry.target.id}"]`);
+            if (entry.isIntersecting) {
+                document.querySelectorAll('#projectList a').forEach(a => a.classList.remove('active'));
+                link.classList.add("active");
+            } else {
+                link.classList.remove("active");
+            }
+        });
+    };
 
-  if (cvTitle && cvContent) {
-      cvTitle.addEventListener("click", function () {
-          cvContent.classList.toggle("hidden");
-      });
-  }
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    projects.forEach((project) => observer.observe(project));
 
-  // Modified toggle functionality for project details
-  document.querySelectorAll('.toggle-content').forEach(button => {
-      button.addEventListener('click', function (e) {
-          e.preventDefault(); // Prevent default button behavior
-          const projectDetails = button.nextElementSibling;
-          const project = button.closest('.project');
-          const projectId = project.id;
-          const link = projectList.querySelector(`a[href="#${projectId}"]`);
+    // Add toggle functionality for the CV section
+    const cvTitle = document.getElementById("cv-title");
+    const cvContent = document.getElementById("cv-content");
 
-          // Store the current scroll position
-          const scrollPosition = window.pageYOffset;
+    if (cvTitle && cvContent) {
+        cvTitle.addEventListener("click", function () {
+            cvContent.classList.toggle("hidden");
+        });
+    }
 
-          projectDetails.classList.toggle('visible');
-          projectDetails.classList.toggle('hidden');
-          button.classList.toggle('active');
+    // Modified toggle functionality for project details
+    document.querySelectorAll('.toggle-content').forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent default button behavior
+            const projectDetails = button.nextElementSibling;
+            const project = button.closest('.project');
+            const projectId = project.id;
+            const link = projectList.querySelector(`a[href="#${projectId}"]`);
 
-          // Update active link in the project list
-          if (projectDetails.classList.contains('visible')) {
-              document.querySelectorAll('#projectList a').forEach(a => a.classList.remove('active'));
-              link.classList.add('active');
-          } else {
-              // If the project is collapsed, trigger the Intersection Observer to update the highlight
-              observer.unobserve(project);
-              observer.observe(project);
-          }
+            // Store the current scroll position
+            const scrollPosition = window.pageYOffset;
 
-          // Restore the scroll position
-          window.scrollTo(0, scrollPosition);
-      });
-  });
+            projectDetails.classList.toggle('visible');
+            projectDetails.classList.toggle('hidden');
+            button.classList.toggle('active');
 
-  // Attach smooth scrolling to links
-  projectList.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', function (e) {
-          e.preventDefault();
-          const targetId = this.getAttribute('href').substring(1);
-          const targetElement = document.getElementById(targetId);
-          if (targetElement) {
-              targetElement.scrollIntoView({ behavior: "smooth" });
-          }
-      });
-  });
+            // Update active link in the project list
+            if (projectDetails.classList.contains('visible')) {
+                document.querySelectorAll('#projectList a').forEach(a => a.classList.remove('active'));
+                link.classList.add('active');
+            } else {
+                // If the project is collapsed, trigger the Intersection Observer to update the highlight
+                observer.unobserve(project);
+                observer.observe(project);
+            }
 
-  // Function to update active link based on scroll position
-  function updateActiveLink() {
-      const scrollPosition = window.scrollY;
-      let activeProject = null;
+            // Restore the scroll position
+            window.scrollTo(0, scrollPosition);
+        });
+    });
 
-      // Find the project that is currently in view
-      projects.forEach(project => {
-          const rect = project.getBoundingClientRect();
-          if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
-              activeProject = project;
-          }
-      });
+    // Attach smooth scrolling to links
+    projectList.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: "smooth" });
+            }
+        });
+    });
 
-      // Update the active link
-      if (activeProject) {
-          const activeLink = projectList.querySelector(`a[href="#${activeProject.id}"]`);
-          document.querySelectorAll('#projectList a').forEach(a => a.classList.remove('active'));
-          activeLink.classList.add('active');
-      }
-  }
+    // Function to update active link based on scroll position
+    function updateActiveLink() {
+        const scrollPosition = window.scrollY;
+        let activeProject = null;
 
-  // Add scroll event listener to update active link
-  window.addEventListener('scroll', updateActiveLink);
+        // Find the project that is currently in view
+        projects.forEach(project => {
+            const rect = project.getBoundingClientRect();
+            if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+                activeProject = project;
+            }
+        });
 
-  // Setup alt text for images
-  document.querySelectorAll('.image-container').forEach(container => {
-      const img = container.querySelector('img');
-      const altText = container.querySelector('.alt-text');
-      if (img && altText) {
-          altText.textContent = img.getAttribute('alt');
-      }
-  });
+        // Update the active link
+        if (activeProject) {
+            const activeLink = projectList.querySelector(`a[href="#${activeProject.id}"]`);
+            document.querySelectorAll('#projectList a').forEach(a => a.classList.remove('active'));
+            activeLink.classList.add('active');
+        }
+    }
 
-  // Image gallery functionality
-  const galleries = document.querySelectorAll('.gallery-container');
+    // Add scroll event listener to update active link
+    window.addEventListener('scroll', updateActiveLink);
 
-  galleries.forEach(gallery => {
-      let slideIndex = 0;
-      const slides = gallery.querySelectorAll('.gallery-slide img');
-      const totalSlides = slides.length;
-      let intervalId;
+    // Setup alt text for images
+    document.querySelectorAll('.image-container').forEach(container => {
+        const img = container.querySelector('img');
+        const altText = container.querySelector('.alt-text');
+        if (img && altText) {
+            altText.textContent = img.getAttribute('alt');
+        }
+    });
 
-      const showSlide = (index) => {
-          clearInterval(intervalId);
-          slideIndex = (index + totalSlides) % totalSlides;
-          slides.forEach((slide, i) => {
-              if (i === slideIndex) {
-                  slide.classList.add('active');
-              } else {
-                  slide.classList.remove('active');
-              }
-          });
-          startGallery();
-      };
+    // Image gallery functionality
+    const galleries = document.querySelectorAll('.gallery-container');
 
-      const startGallery = () => {
-          intervalId = setInterval(() => {
-              showSlide(slideIndex + 1);
-          }, 4000);
-      };
+    galleries.forEach(gallery => {
+        let slideIndex = 0;
+        const slides = gallery.querySelectorAll('.gallery-slide img');
+        const totalSlides = slides.length;
+        let intervalId;
 
-      // Create and append arrow buttons
-      const prevButton = document.createElement('button');
-      prevButton.className = 'prev';
-      prevButton.innerHTML = '❮';
-      gallery.appendChild(prevButton);
+        const showSlide = (index) => {
+            clearInterval(intervalId);
+            slideIndex = (index + totalSlides) % totalSlides;
+            slides.forEach((slide, i) => {
+                if (i === slideIndex) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+            startGallery();
+        };
 
-      const nextButton = document.createElement('button');
-      nextButton.className = 'next';
-      nextButton.innerHTML = '❯';
-      gallery.appendChild(nextButton);
+        const startGallery = () => {
+            intervalId = setInterval(() => {
+                showSlide(slideIndex + 1);
+            }, 4000);
+        };
 
-      prevButton.addEventListener('click', (e) => {
-          e.stopPropagation();
-          showSlide(slideIndex - 1);
-      });
+        // Create and append arrow buttons
+        const prevButton = document.createElement('button');
+        prevButton.className = 'prev';
+        prevButton.innerHTML = '❮';
+        gallery.appendChild(prevButton);
 
-      nextButton.addEventListener('click', (e) => {
-          e.stopPropagation();
-          showSlide(slideIndex + 1);
-      });
+        const nextButton = document.createElement('button');
+        nextButton.className = 'next';
+        nextButton.innerHTML = '❯';
+        gallery.appendChild(nextButton);
 
-      // Set initial active slide
-      showSlide(slideIndex);
+        prevButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showSlide(slideIndex - 1);
+        });
 
-      // Add click event to enlarge images
-      slides.forEach((slide, index) => {
-          slide.addEventListener('click', (e) => {
-              e.stopPropagation();
-              enlargeGallery(gallery, index);
-          });
-      });
-  });
+        nextButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showSlide(slideIndex + 1);
+        });
 
-  // Function to create and show enlarged gallery
-  function enlargeGallery(gallery, startIndex) {
-      const slides = gallery.querySelectorAll('.gallery-slide img');
-      const totalSlides = slides.length;
-      let currentIndex = startIndex;
+        // Set initial active slide
+        showSlide(slideIndex);
 
-      const overlay = document.createElement('div');
-      overlay.className = 'enlarged-image-overlay';
+        // Add click event to enlarge images
+        slides.forEach((slide, index) => {
+            slide.addEventListener('click', (e) => {
+                e.stopPropagation();
+                enlargeGallery(gallery, index);
+            });
+        });
+    });
 
-      const container = document.createElement('div');
-      container.className = 'enlarged-image-container';
+    // Function to create and show enlarged gallery
+    function enlargeGallery(gallery, startIndex) {
+        const slides = gallery.querySelectorAll('.gallery-slide img');
+        const totalSlides = slides.length;
+        let currentIndex = startIndex;
 
-      const img = document.createElement('img');
-      img.src = slides[currentIndex].src;
-      img.className = 'enlarged-image';
+        const overlay = document.createElement('div');
+        overlay.className = 'enlarged-image-overlay';
 
-      const closeButton = document.createElement('span');
-      closeButton.innerHTML = '&times;';
-      closeButton.className = 'close-button';
+        const container = document.createElement('div');
+        container.className = 'enlarged-image-container';
 
-      const prevButton = document.createElement('button');
-      prevButton.className = 'enlarged-prev';
-      prevButton.innerHTML = '❮';
+        const img = document.createElement('img');
+        img.src = slides[currentIndex].src;
+        img.className = 'enlarged-image';
 
-      const nextButton = document.createElement('button');
-      nextButton.className = 'enlarged-next';
-      nextButton.innerHTML = '❯';
+        const closeButton = document.createElement('span');
+        closeButton.innerHTML = '&times;';
+        closeButton.className = 'close-button';
 
-      container.appendChild(img);
-      container.appendChild(prevButton);
-      container.appendChild(nextButton);
-      overlay.appendChild(container);
-      overlay.appendChild(closeButton);
-      document.body.appendChild(overlay);
+        const prevButton = document.createElement('button');
+        prevButton.className = 'enlarged-prev';
+        prevButton.innerHTML = '❮';
 
-      // Show the overlay
-      overlay.style.display = 'flex';
+        const nextButton = document.createElement('button');
+        nextButton.className = 'enlarged-next';
+        nextButton.innerHTML = '❯';
 
-      // Disable scrolling on the main page
-      document.body.style.overflow = 'hidden';
+        container.appendChild(img);
+        container.appendChild(prevButton);
+        container.appendChild(nextButton);
+        overlay.appendChild(container);
+        overlay.appendChild(closeButton);
+        document.body.appendChild(overlay);
 
-      const showEnlargedSlide = (index) => {
-          currentIndex = (index + totalSlides) % totalSlides;
-          img.src = slides[currentIndex].src;
-      };
+        // Show the overlay
+        overlay.style.display = 'flex';
 
-      prevButton.addEventListener('click', (e) => {
-          e.stopPropagation();
-          showEnlargedSlide(currentIndex - 1);
-      });
+        // Disable scrolling on the main page
+        document.body.style.overflow = 'hidden';
 
-      nextButton.addEventListener('click', (e) => {
-          e.stopPropagation();
-          showEnlargedSlide(currentIndex + 1);
-      });
+        const showEnlargedSlide = (index) => {
+            currentIndex = (index + totalSlides) % totalSlides;
+            img.src = slides[currentIndex].src;
+        };
 
-      // Close on click outside the image or on close button
-      overlay.addEventListener('click', (e) => {
-          if (e.target === overlay || e.target === closeButton) {
-              document.body.removeChild(overlay);
-              // Re-enable scrolling on the main page
-              document.body.style.overflow = 'auto';
-          }
-      });
+        prevButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showEnlargedSlide(currentIndex - 1);
+        });
 
-      // Prevent closing when clicking inside the image container
-      container.addEventListener('click', (e) => {
-          e.stopPropagation();
-      });
-  }
+        nextButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showEnlargedSlide(currentIndex + 1);
+        });
+
+        // Close on click outside the image or on close button
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay || e.target === closeButton) {
+                document.body.removeChild(overlay);
+                // Re-enable scrolling on the main page
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Prevent closing when clicking inside the image container
+        container.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    }
 });
