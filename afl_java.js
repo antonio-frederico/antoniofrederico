@@ -162,6 +162,16 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+        // Add toggle functionality for the Contact section
+        const contactTitle = document.getElementById("contact-title");
+        const contactContent = document.getElementById("contact-content");
+    
+        if (contactTitle && contactContent) {
+            contactTitle.addEventListener("click", function () {
+                contactContent.classList.toggle("hidden");
+            });
+        }
+
     // Modified toggle functionality for project details
     document.querySelectorAll('.toggle-content').forEach(button => {
         button.addEventListener('click', function (e) {

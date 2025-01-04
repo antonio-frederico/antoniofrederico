@@ -103,6 +103,16 @@ h4 {
   display: none;
 }
 
+#contact-title:hover {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#contact-content.hidden {
+  display: none;
+}
+
+
 .container {
   display: flex;
 }
