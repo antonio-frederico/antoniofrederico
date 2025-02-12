@@ -203,53 +203,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-      // Intersection Observer for lazy loading
-      const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                if (img.dataset.src) {
-                    img.src = img.dataset.src;
-                    img.removeAttribute('data-src');
-                    observer.unobserve(img);
-                }
-            }
-        });
-    }, {
-        rootMargin: '50px 0px', // Start loading images 50px before they enter viewport
-        threshold: 0.1
-    });
-
-    // Prioritize loading visible images first
-    function prioritizeImages() {
-        const allImages = document.querySelectorAll('img[data-src]');
-        
-        // Calculate which images are in viewport
-        const viewportImages = Array.from(allImages).filter(img => {
-            const rect = img.getBoundingClientRect();
-            return (
-                rect.top >= 0 &&
-                rect.left >= 0 &&
-                rect.bottom <= window.innerHeight &&
-                rect.right <= window.innerWidth
-            );
-        });
-
-        // Load viewport images immediately
-        viewportImages.forEach(img => {
-            img.src = img.dataset.src;
-            img.removeAttribute('data-src');
-            imageObserver.unobserve(img);
-        });
-
-        // Observer for rest of images
-        allImages.forEach(img => {
-            if (!viewportImages.includes(img)) {
-                imageObserver.observe(img);
-            }
-        });
-    }
-
     // Attach smooth scrolling to links
     projectList.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', function (e) {
