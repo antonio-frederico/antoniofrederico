@@ -152,6 +152,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const observer = new IntersectionObserver(observerCallback, observerOptions);
     projects.forEach((project) => observer.observe(project));
 
+    // Add toggle functionality for the ComingUp section
+    const ComingUpTitle = document.getElementById("ComingUp-title");
+    const ComingUpContent = document.getElementById("ComingUp-content");
+
+    if (ComingUpTitle && ComingUpContent) {
+        ComingUpTitle.addEventListener("click", function () {
+            ComingUpContent.classList.toggle("hidden");
+        });
+    }    
+    
     // Add toggle functionality for the CV section
     const cvTitle = document.getElementById("cv-title");
     const cvContent = document.getElementById("cv-content");
